@@ -1,0 +1,21 @@
+﻿@model IQueryable<hasicskyutok.ViewModel.Vysledek>
+@{
+    ViewData["Title"] = "Úvodní stránka";
+}
+
+<h3>Výsledky</h3>
+<table class="table table-hover table-striped">
+    <tr>
+        <th>Družstvo</th>
+        <th>Startovní číslo</th>
+        <th>Výsledný čas</th>
+    </tr>
+    @foreach (var vysledek in Model)
+    {
+        <tr>
+            <td>@vysledek.DruzstvoNazev</td>
+            <td>@vysledek.StartovniCislo</td>
+            <td>@vysledek.VyslednyCas</td>
+        </tr>
+    }
+</table>
