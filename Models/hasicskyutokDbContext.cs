@@ -7,6 +7,7 @@ namespace hasicskyutok.Models
     {
         public hasicskyutokDbContext(DbContextOptions<hasicskyutokDbContext> options) : base(options)
         {
+            this.Database.Migrate();
         }
 
 
