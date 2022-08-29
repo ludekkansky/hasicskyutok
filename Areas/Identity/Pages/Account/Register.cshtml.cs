@@ -1,23 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 
 namespace hasicskyutok.Areas.Identity.Pages.Account
 {
@@ -29,13 +17,17 @@ namespace hasicskyutok.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IRoleStore<IdentityRole> _roleStore;
+        private readonly RoleManager<IdentityRole> _roleMgr;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IRoleStore<IdentityRole> roleStore,
+            RoleManager<IdentityRole> roleMgr)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +35,8 @@ namespace hasicskyutok.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleStore = roleStore;
+            _roleMgr = roleMgr;
         }
 
         /// <summary>
@@ -116,29 +110,42 @@ namespace hasicskyutok.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                bool jePrvni = false;
+                if (_userManager.Users.Count() == 0)
+                {
+                    jePrvni = true;
+                    _logger.LogWarning("Je to prvni uzivatel .. automaticky z nej udelame admina..");
+                    //prvni uzivatel bude automaticky admin
+                    if (!await _roleMgr.RoleExistsAsync("Admin"))
+                    {
+                        var adminRole = Activator.CreateInstance<IdentityRole>();
+                        adminRole.Name = "Admin";
+                        var res = await _roleMgr.CreateAsync(adminRole);
+                        if (res.Succeeded)
+                            _logger.LogWarning("Vytvořena role Admin");
+                    }
+                }
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
+                if (jePrvni) await _userManager.AddToRoleAsync(user, "Admin");
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("Uživatel vytvořil nový úšet s heslem.");
+                    _logger.LogWarning("Uživatel vytvořil nový účet s heslem.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId, code, returnUrl },
-                        protocol: Request.Scheme);
+                    //                     var userId = await _userManager.GetUserIdAsync(user);
+                    //                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //                     var callbackUrl = Url.Page(
+                    //                         "/Account/ConfirmEmail",
+                    //                         pageHandler: null,
+                    //                         values: new { area = "Identity", userId, code, returnUrl },
+                    //                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Potvrzení emailu - Orlický bloudil",
-                        $@"
-<h3>Díky za registraci na serveru server.softpc.cz/bloudil</h3>
+                    //                     await _emailSender.SendEmailAsync(Input.Email, "Potvrzení emailu",
+                    //                         $@"
+                    // <h3>Díky za registraci</h3>
 
-Děkujeme za registraci na serveru. Potvrďte prosím Váš účet <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím na odkaz</a>.
-
-<p>Po přihlášení na serveru si pak můžete vyplnit registraci, upravit stávající družstva nebo seznam závodníků. Více na http://server.softpc.cz/bloudil.</p>
-");
+                    // Děkujeme za registraci na serveru. Potvrďte prosím Váš účet <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím na odkaz</a>.
+                    // ");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

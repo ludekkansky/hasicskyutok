@@ -78,11 +78,11 @@ namespace hasicskyutok.Areas.Identity.Pages.Account
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 Input.Email,
-                "Potvrzení emailu na Orlický bloudil",
+                "Potvrzení emailu",
                 @$"
 <h4>Repotvrzení registrace</h4>
 Prosím potvrďte svůj účet kliknutím zde <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>zde</a>.
-<p>Bloudil team</p>
+<p>hasiči</p>
 ");
 
             ModelState.AddModelError(string.Empty, "Zkontrolujte si poštu, kontrolní email byl odeslán.");

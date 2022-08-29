@@ -12,7 +12,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
  options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<hasicskyutok.Models.hasicskyutokDbContext>();
-    
+
 
 builder.Services.AddTransient<IEmailSender, hasicskyutok.Services.EmailSender>();
 
@@ -33,6 +33,9 @@ builder.Services.Configure<IdentityOptions>(options =>
 
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
 });
 
 builder.Services.ConfigureApplicationCookie(options =>

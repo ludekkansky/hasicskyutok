@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using hasicskyutok.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace hasickyutok.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class KategorieController : Controller
     {
         private readonly hasicskyutokDbContext _context;
@@ -21,7 +23,7 @@ namespace hasickyutok.Controllers
         // GET: Kategorie
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Kategorie.ToListAsync());
+            return View(await _context.Kategorie.ToListAsync());
         }
 
         // GET: Kategorie/Details/5
@@ -147,14 +149,14 @@ namespace hasickyutok.Controllers
             {
                 _context.Kategorie.Remove(kategorie);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool KategorieExists(int id)
         {
-          return _context.Kategorie.Any(e => e.ID == id);
+            return _context.Kategorie.Any(e => e.ID == id);
         }
     }
 }
