@@ -1,0 +1,36 @@
+@model IEnumerable<hasicskyutok.ViewModel.PrehledUcet>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Uživatelé</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Uživatel</th>
+            <th>Potvrzen</th>
+            <th>Skupiny</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Potvrzen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Skupiny)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">Smazat</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
