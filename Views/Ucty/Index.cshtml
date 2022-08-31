@@ -28,9 +28,55 @@
                 @Html.DisplayFor(modelItem => item.Skupiny)
             </td>
             <td>
-                <a asp-action="Delete" asp-route-id="@item.Id">Smazat</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Smazat</a>
+                <input id="buttonPridejAdmina" data-id="@item.Id" type="button" class="btn btn-success is-invalid" value="Přidej admina" onclick="PridejAdmina(this)" />
+                <input id="buttonOdeberAdmina" data-id="@item.Id" type="button" class="btn btn-warning is-invalid" value="Odeber admina" onclick="OdeberAdmina(this)" />
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+
+<script>
+    function PridejAdmina(tlacitko) {
+         var idToSet = $(tlacitko).attr("data-id");
+        $(tlacitko).attr('disabled', true);
+
+        $.ajax({
+            url: '@Url.Action("PridejAdmina")',
+            data: {
+                id: idToSet
+            },
+            type: 'POST',
+            success: function (data, status, xhr) {
+                $(tlacitko).attr('disabled', false);
+                location.reload();
+                //window.location.href = '@Url.Action("Index", "Prihlaska")';
+            },
+            error: function (jqXHR, status, errorThrown) {
+                $('#registraceHlaska').html(jqXHR.responseText);
+            }
+        });
+    }
+    function OdeberAdmina(tlacitko) {
+         var idToSet = $(tlacitko).attr("data-id");
+        $(tlacitko).attr('disabled', true);
+
+        $.ajax({
+            url: '@Url.Action("OdeberAdmina")',
+            data: {
+                id: idToSet
+            },
+            type: 'POST',
+            success: function (data, status, xhr) {
+                $(tlacitko).attr('disabled', false);
+                location.reload();
+                //window.location.href = '@Url.Action("Index", "Prihlaska")';
+            },
+            error: function (jqXHR, status, errorThrown) {
+                $('#registraceHlaska').html(jqXHR.responseText);
+            }
+        });
+    }
+</script>

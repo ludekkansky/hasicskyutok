@@ -39,6 +39,28 @@ namespace hasickyutok.Controllers
             return View(seznam);
         }
 
+        public async Task<IActionResult> PridejAdmina(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _userManager.AddToRoleAsync(user, "Admin");
+            return Json(true);
+        }
+
+        public async Task<IActionResult> OdeberAdmina(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _userManager.RemoveFromRoleAsync(user, "Admin");
+            return Json(true);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Delete(string Id)
         {
