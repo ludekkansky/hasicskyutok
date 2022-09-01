@@ -3,19 +3,46 @@
     ViewData["Title"] = "Úvodní stránka";
 }
 
-<h3>Výsledky</h3>
+@using (Html.BeginForm("Vyhledat", "Home"))
+{
+    <input type="text" name="startovniCislo" placeholder="Startovní číslo" class="form-control" />
+    <input type="submit" value="Vyhledat" class="btn btn-success" />
+}
+
+<font color="red">@ViewBag.Chyba</font>
+
+<br />
+@* <h3>Přehled</h3> *@
 <table class="table table-hover table-striped">
-    <tr>
-        <th>Družstvo</th>
-        <th>Startovní číslo</th>
-        <th>Výsledný čas</th>
-    </tr>
-    @foreach (var vysledek in Model)
-    {
+    <thead>
         <tr>
-            <td>@vysledek.DruzstvoNazev</td>
-            <td>@vysledek.StartovniCislo</td>
-            <td>@vysledek.VyslednyCas</td>
+            <th>Startovní číslo</th>
+            <th>Družstvo</th>
+            <th>Výsledný čas 1</th>
+            <th>Výsledný čas 2</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var vysledek in Model)
+        {
+            <tr>
+                <td align='center'>@vysledek.StartovniCislo</td>
+                <td><a href='@Url.Action("Detail","Home",new {id=@vysledek.DruzstvoID})'>@vysledek.DruzstvoNazev</a></td>
+                <td>
+                    @Html.DisplayFor(s=>vysledek.VyslednyCas1)
+                    @if (vysledek.NeplatnyPokus1 == true)
+                    {
+                        <font color='red'><strong>X</strong></font>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(s => vysledek.VyslednyCas2)
+                    @if (vysledek.NeplatnyPokus2 == true)
+                    {
+                        <font color='red'><strong>X</strong></font>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

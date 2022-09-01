@@ -1,0 +1,37 @@
+@model hasicskyutok.ViewModel.DruzstvoVysledek
+
+@using (Html.BeginForm("Detail", "Home", "POST"))
+{
+    @Html.HiddenFor(s=>s.ID)
+    <div class="row">
+        <div class="col-md-2">
+            <label for="StartovniCislo">Startovní číslo</label>
+            <input type="text" name="StartovniCislo" value="@Model.StartovniCislo" class="form-control" />
+        </div>
+        <div class="col-md-10">
+            <label for="NazevDruzstva">Název družstva</label>
+            <input type="text" name="NazevDruzstva" value="@Model.DruzstvoNazev" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">
+            <label for="Vysledek1">Výsledek č.1</label>
+            <input type="text" name="Vysledek1" value="@Model.Vysledek1" class="form-control" />
+        </div>
+        <div class="col-md-1">
+            <label for="NeplatnyPokus1">Neplatný pokus</label>
+            @Html.CheckBoxFor(s=>Model.NeplatnyPokus1,new {htmlAttributes = new { @class="from-check-input"}})
+        </div>
+        <div class="col-md-5">
+            <label for="Vysledek2">Výsledek č.2</label>
+            <input type="text" name="Vysledek2" value="@Model.Vysledek2" class="form-control" />
+        </div>
+        <div class="col-md-1">
+            <label for="NeplatnyPokus2">Neplatný pokus</label>
+            @Html.CheckBoxFor(s=>Model.NeplatnyPokus2,new {htmlAttributes = new { @class="from-check-input"}})
+        </div>
+    </div>
+
+    <input type="submit" value="Uložit" class="btn btn-success" />
+}

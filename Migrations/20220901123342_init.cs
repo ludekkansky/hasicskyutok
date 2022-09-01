@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace hasickyutok.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -194,8 +194,10 @@ namespace hasickyutok.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Cas1 = table.Column<TimeOnly>(type: "TEXT", nullable: true),
-                    Cas2 = table.Column<TimeOnly>(type: "TEXT", nullable: true),
+                    Cas1 = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    NeplatnyPokus1 = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Cas2 = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    NeplatnyPokus2 = table.Column<bool>(type: "INTEGER", nullable: false),
                     DruzstvoID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

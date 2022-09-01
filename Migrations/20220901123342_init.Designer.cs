@@ -11,8 +11,8 @@ using hasicskyutok.Models;
 namespace hasickyutok.Migrations
 {
     [DbContext(typeof(hasicskyutokDbContext))]
-    [Migration("20220829062453_Initialize")]
-    partial class Initialize
+    [Migration("20220901123342_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,13 +64,19 @@ namespace hasickyutok.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<TimeOnly?>("Cas1")
+                    b.Property<DateTime?>("Cas1")
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeOnly?>("Cas2")
+                    b.Property<DateTime?>("Cas2")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("DruzstvoID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NeplatnyPokus1")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NeplatnyPokus2")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");

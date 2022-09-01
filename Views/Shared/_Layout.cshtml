@@ -7,7 +7,7 @@
     <title>@ViewData["Title"] - Hasičský útok</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/hasicskyutok.styles.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/styles.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
@@ -28,7 +28,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Prihlaska" asp-action="Index">Přihlášky</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Vysledky">Výsledky</a>
                         </li>
 
                         <li class="nav-item dropdown">

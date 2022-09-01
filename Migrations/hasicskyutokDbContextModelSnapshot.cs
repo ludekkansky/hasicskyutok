@@ -62,13 +62,19 @@ namespace hasickyutok.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<TimeOnly?>("Cas1")
+                    b.Property<DateTime?>("Cas1")
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeOnly?>("Cas2")
+                    b.Property<DateTime?>("Cas2")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("DruzstvoID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NeplatnyPokus1")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NeplatnyPokus2")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
