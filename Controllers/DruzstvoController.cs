@@ -50,7 +50,14 @@ namespace hasickyutok.Controllers
         public IActionResult Create()
         {
             ViewData["KategorieID"] = new SelectList(_context.Kategorie, "ID", "Nazev");
-            return View();
+            var druzstvo = new hasicskyutok.Models.Druzstvo();
+            var posledniStartovniCislo = 0;
+            if (_context.Druzstva.Any())
+            {
+                posledniStartovniCislo = _context.Druzstva.Max(s => s.StartovniCislo);
+            }
+            druzstvo.StartovniCislo = posledniStartovniCislo + 1;
+            return View(druzstvo);
         }
 
         // POST: Druzstvo/Create
@@ -62,9 +69,13 @@ namespace hasickyutok.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(druzstvo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (!_context.Druzstva.Any(s => s.StartovniCislo == druzstvo.StartovniCislo))
+                {
+                    _context.Add(druzstvo);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError("StartovniCislo","Startovní číslo již použil někdo jiný.");
             }
             ViewData["KategorieID"] = new SelectList(_context.Kategorie, "ID", "Nazev", druzstvo.KategorieID);
             return View(druzstvo);
@@ -156,14 +167,14 @@ namespace hasickyutok.Controllers
             {
                 _context.Druzstva.Remove(druzstvo);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DruzstvoExists(int id)
         {
-          return _context.Druzstva.Any(e => e.ID == id);
+            return _context.Druzstva.Any(e => e.ID == id);
         }
     }
 }
