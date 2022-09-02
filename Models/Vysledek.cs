@@ -20,10 +20,24 @@ public class Vysledek : IComparable
     public int CompareTo(object obj)
     {
         var vysledek = obj as Vysledek;
-        if (this.NeplatnyPokus1 == false && this.Cas1 < vysledek.Cas1 && vysledek.NeplatnyPokus1 == false) return -1;
-        if (this.NeplatnyPokus1 == false && this.Cas1 < vysledek.Cas2 && vysledek.NeplatnyPokus2 == false) return -1;
-        if (this.NeplatnyPokus2 == false && this.Cas2 < vysledek.Cas2 && vysledek.NeplatnyPokus2 == false) return -1;
-        return 1;
-    }
+        DateTime? lepsiCasA = new DateTime();
+        DateTime? lepsiCasB = new DateTime();
+        if (!NeplatnyPokus1) lepsiCasA = Cas1;
+        if (lepsiCasA==DateTime.MinValue && !NeplatnyPokus2) lepsiCasA = Cas2;
+        if (!NeplatnyPokus2 && lepsiCasA > Cas2) lepsiCasA = Cas2;
 
+        if (!vysledek.NeplatnyPokus1) lepsiCasB = vysledek.Cas1;
+        if (lepsiCasB==DateTime.MinValue && !vysledek.NeplatnyPokus2) lepsiCasB = vysledek.Cas2;
+        if (!vysledek.NeplatnyPokus2 && lepsiCasB > vysledek.Cas2) lepsiCasB = vysledek.Cas2;
+
+        if (lepsiCasA == DateTime.MinValue && lepsiCasB != DateTime.MinValue) return 1;
+        if (lepsiCasA == DateTime.MinValue && lepsiCasB == DateTime.MinValue) return 0;
+        if (lepsiCasA != DateTime.MinValue && lepsiCasB == DateTime.MinValue) return -1;
+        
+        if (lepsiCasA < lepsiCasB) return -1;
+        if (lepsiCasA == lepsiCasB) return 0;
+        if (lepsiCasA > lepsiCasB) return 1;
+
+        return 0;
+    }
 }
