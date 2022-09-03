@@ -99,8 +99,20 @@ public class HomeController : Controller
         // DateTime.TryParse(DateTime.Today.ToString("dd.MM.yyyy ") + vysledek.Vysledek1, out DateTime cas1);
         // DateTime.TryParse(DateTime.Today.ToString("dd.MM.yyyy ") + vysledek.Vysledek2, out DateTime cas2);
 
-        DateTime.TryParse(vysledek.Vysledek1, out DateTime cas1);
-        DateTime.TryParse(vysledek.Vysledek2, out DateTime cas2);
+        var parse1 = DateTime.TryParse(vysledek.Vysledek1, out DateTime cas1);
+        var parse2 = DateTime.TryParse(vysledek.Vysledek2, out DateTime cas2);
+
+        if (!string.IsNullOrEmpty(vysledek.Vysledek1) && parse1 == false)
+        {
+            ModelState.AddModelError("Vysledek1", "Čas není ve správném formátu.");
+            return View(vysledek);
+        }
+
+        if (!string.IsNullOrEmpty(vysledek.Vysledek2) && parse2 == false)
+        {
+            ModelState.AddModelError("Vysledek2", "Čas není ve správném formátu.");
+            return View(vysledek);
+        }
 
         //tady ulozime vysledek
         var vysledekDB = _dbContext.Vysledky.FirstOrDefault(s => s.DruzstvoID == vysledek.ID);
@@ -129,7 +141,7 @@ public class HomeController : Controller
 
     public IActionResult Vysledky()
     {
-        var vysledky = _dbContext.Vysledky.Where(s => s.NeplatnyPokus1 == false || s.NeplatnyPokus2 == false).OrderBy(s => s.Cas1).ThenBy(s => s.Cas2).Include(s=>s.Druzstvo);
+        var vysledky = _dbContext.Vysledky.Where(s => s.NeplatnyPokus1 == false || s.NeplatnyPokus2 == false).OrderBy(s => s.Cas1).ThenBy(s => s.Cas2).Include(s => s.Druzstvo);
 
         return View(vysledky);
     }

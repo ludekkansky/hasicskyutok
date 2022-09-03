@@ -18,6 +18,7 @@
         <div class="col-md-5">
             <label for="Vysledek1">Výsledek č.1</label>
             <input type="text" name="Vysledek1" value="@Model.Vysledek1" class="form-control" />
+            <span asp-validation-for="Vysledek1" class="text-danger"></span>
         </div>
         <div class="col-md-1">
             <label for="NeplatnyPokus1">Neplatný pokus</label>
@@ -26,6 +27,7 @@
         <div class="col-md-5">
             <label for="Vysledek2">Výsledek č.2</label>
             <input type="text" name="Vysledek2" value="@Model.Vysledek2" class="form-control" />
+            <span asp-validation-for="Vysledek2" class="text-danger"></span>
         </div>
         <div class="col-md-1">
             <label for="NeplatnyPokus2">Neplatný pokus</label>

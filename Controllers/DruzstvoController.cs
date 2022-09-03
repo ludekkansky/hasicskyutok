@@ -27,7 +27,6 @@ namespace hasickyutok.Controllers
             return View(await hasicskyutokDbContext.ToListAsync());
         }
 
-        // GET: Druzstvo/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Druzstva == null)
@@ -46,7 +45,6 @@ namespace hasickyutok.Controllers
             return View(druzstvo);
         }
 
-        // GET: Druzstvo/Create
         public IActionResult Create()
         {
             ViewData["KategorieID"] = new SelectList(_context.Kategorie, "ID", "Nazev");
@@ -60,9 +58,6 @@ namespace hasickyutok.Controllers
             return View(druzstvo);
         }
 
-        // POST: Druzstvo/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Nazev,StartovniCislo,KategorieID")] Druzstvo druzstvo)
@@ -81,7 +76,6 @@ namespace hasickyutok.Controllers
             return View(druzstvo);
         }
 
-        // GET: Druzstvo/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Druzstva == null)
@@ -98,9 +92,6 @@ namespace hasickyutok.Controllers
             return View(druzstvo);
         }
 
-        // POST: Druzstvo/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Nazev,StartovniCislo,KategorieID")] Druzstvo druzstvo)
@@ -134,7 +125,6 @@ namespace hasickyutok.Controllers
             return View(druzstvo);
         }
 
-        // GET: Druzstvo/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Druzstva == null)
@@ -153,7 +143,6 @@ namespace hasickyutok.Controllers
             return View(druzstvo);
         }
 
-        // POST: Druzstvo/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
