@@ -12,6 +12,7 @@
     <table class="table table-hover table-striped">
         <thead>
             <tr>
+                <th>Pořadí</th>
                 <th>Startovní číslo</th>
                 <th>Družstvo</th>
                 <th>Výsledný čas 1</th>
@@ -22,9 +23,11 @@
         @{
             var seznam = Model.Where(s => s.Druzstvo.Kategorie.Nazev == kategorie).ToList();
             seznam.Sort();
+            int poradi = 1;
             foreach (var vysledek in seznam)
             {
                 <tr>
+                    <td align='center'>@poradi</td>
                     <td align='center'>@vysledek.Druzstvo.StartovniCislo</td>
                     <td><a href='@Url.Action("Detail","Home",new {id=@vysledek.DruzstvoID})'>@vysledek.Druzstvo.Nazev</a></td>
                     <td>
@@ -34,6 +37,7 @@
                         @Html.DisplayFor(s => vysledek.Cas2)
                     </td>
                 </tr>
+                poradi++;
             }
         }
         </tbody>
