@@ -44,8 +44,24 @@
     </table>
 }
 
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+
 <script type="text/javascript">
-    setTimeout(function () { 
-      location.reload();
-    }, 1 * 60 * 1000);
+//    setTimeout(function () { 
+//      location.reload();
+//    }, 1 * 60 * 1000);
+"use strict";
+
+console.log("startujeme chatHub...");
+var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+console.log("prihodime on receiveMessage...");
+
+connection.on("ReceiveMessage", function (user, message) {
+    console.log("received message");
+    location.reload();
+    //var li = document.createElement("li");
+    //document.getElementById("messagesList").appendChild(li);
+    //li.textContent = `${user} says ${message}`;
+});
+
 </script>

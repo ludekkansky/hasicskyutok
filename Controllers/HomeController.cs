@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using hasicskyutok.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SignalRChat.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace hasicskyutok.Controllers;
 
@@ -10,15 +11,19 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly hasicskyutokDbContext _dbContext;
-    public HomeController(ILogger<HomeController> logger, hasicskyutokDbContext dbContext)
+    private readonly IHubContext<ChatHub> _chatHub;
+
+    public HomeController(ILogger<HomeController> logger, hasicskyutokDbContext dbContext, IHubContext<ChatHub> chatHub)
     {
         _logger = logger;
         _dbContext = dbContext;
+        _chatHub = chatHub;
     }
     public IActionResult Index()
     {
         var druzstva = GetDruzstva();
 
+        _chatHub.Clients.All.SendAsync("ReceiveMessage", "user", "Getting index");
         return View(druzstva);
     }
 
@@ -96,9 +101,6 @@ public class HomeController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Detail(ViewModel.DruzstvoVysledek vysledek)
     {
-        // DateTime.TryParse(DateTime.Today.ToString("dd.MM.yyyy ") + vysledek.Vysledek1, out DateTime cas1);
-        // DateTime.TryParse(DateTime.Today.ToString("dd.MM.yyyy ") + vysledek.Vysledek2, out DateTime cas2);
-
         var parse1 = DateTime.TryParse(vysledek.Vysledek1, out DateTime cas1);
         var parse2 = DateTime.TryParse(vysledek.Vysledek2, out DateTime cas2);
 
@@ -136,7 +138,11 @@ public class HomeController : Controller
             vysledekDB.NeplatnyPokus2 = vysledek.NeplatnyPokus2;
         }
         await _dbContext.SaveChangesAsync();
-        return RedirectToAction("Index", GetDruzstva());
+
+        var druzstvo = await _dbContext.Druzstva.FirstOrDefaultAsync(s => s.ID == vysledekDB.ID);
+        await _chatHub.Clients.All.SendAsync("UpdateVysledek", vysledekDB.ID, druzstvo.StartovniCislo, druzstvo.Nazev, vysledekDB.Cas1, vysledekDB.Cas2);
+
+        return RedirectToAction("Index", "Home");
     }
 
     public IActionResult Vysledky()
@@ -144,5 +150,10 @@ public class HomeController : Controller
         var vysledky = _dbContext.Vysledky.Where(s => s.NeplatnyPokus1 == false || s.NeplatnyPokus2 == false).OrderBy(s => s.Cas1).ThenBy(s => s.Cas2).Include(s => s.Druzstvo);
 
         return View(vysledky);
+    }
+
+    public IActionResult Test()
+    {
+        return View();
     }
 }

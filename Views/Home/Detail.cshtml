@@ -1,6 +1,6 @@
 @model hasicskyutok.ViewModel.DruzstvoVysledek
 
-@using (Html.BeginForm("Detail", "Home", "POST"))
+@using (Html.BeginForm("Detail", "Home", FormMethod.Post))
 {
     @Html.HiddenFor(s=>s.ID)
     <div class="row">

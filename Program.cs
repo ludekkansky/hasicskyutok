@@ -17,6 +17,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 builder.Services.AddTransient<IEmailSender, hasicskyutok.Services.EmailSender>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -83,5 +84,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.UseSession();
+app.MapHub<SignalRChat.Hubs.ChatHub>("/chatHub");
 app.MapRazorPages();
 app.Run();
