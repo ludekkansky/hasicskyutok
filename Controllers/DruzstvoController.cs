@@ -20,11 +20,16 @@ namespace hasickyutok.Controllers
             _context = context;
         }
 
-        // GET: Druzstvo
         public async Task<IActionResult> Index()
         {
             var hasicskyutokDbContext = _context.Druzstva.Include(d => d.Kategorie);
             return View(await hasicskyutokDbContext.OrderBy(s=>s.StartovniCislo).ToListAsync());
+        }
+        [AllowAnonymous]
+        public async Task<IActionResult> StartovniListina()
+        {
+            var hasicskyutokDbContext = _context.Druzstva.Include(d => d.Kategorie);
+            return View(await hasicskyutokDbContext.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
