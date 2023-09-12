@@ -20,26 +20,34 @@
             </tr>
         </thead>
         <tbody>
-        @{
-            var seznam = Model.Where(s => s.Druzstvo.Kategorie.Nazev == kategorie).ToList();
-            seznam.Sort();
-            int poradi = 1;
-            foreach (var vysledek in seznam)
-            {
-                <tr>
-                    <td align='center'>@poradi</td>
-                    <td align='center'>@vysledek.Druzstvo.StartovniCislo</td>
-                    <td><a href='@Url.Action("Detail","Home",new {id=@vysledek.DruzstvoID})'>@vysledek.Druzstvo.Nazev</a></td>
-                    <td>
-                        @Html.DisplayFor(s=>vysledek.Cas1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(s => vysledek.Cas2)
-                    </td>
-                </tr>
-                poradi++;
+            @{
+                var seznam = Model.Where(s => s.Druzstvo.Kategorie.Nazev == kategorie).ToList();
+                seznam.Sort();
+                int poradi = 1;
+                foreach (var vysledek in seznam)
+                {
+                    <tr>
+                        <td align='center'>@poradi</td>
+                        <td align='center'>@vysledek.Druzstvo.StartovniCislo</td>
+                        <td><a href='@Url.Action("Detail","Home",new {id=@vysledek.DruzstvoID})'>@vysledek.Druzstvo.Nazev</a></td>
+                        <td>
+                            @Html.DisplayFor(s=>vysledek.Cas1)
+                            @if (vysledek.NeplatnyPokus1 == true)
+                            {
+                                <font color='red'><strong>X</strong></font>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(s => vysledek.Cas2)
+                            @if (vysledek.NeplatnyPokus2 == true)
+                            {
+                                <font color='red'><strong>X</strong></font>
+                            }
+                        </td>
+                    </tr>
+                    poradi++;
+                }
             }
-        }
         </tbody>
     </table>
 }
@@ -47,21 +55,21 @@
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 
 <script type="text/javascript">
-//    setTimeout(function () { 
-//      location.reload();
-//    }, 1 * 60 * 1000);
-"use strict";
+    //    setTimeout(function () { 
+    //      location.reload();
+    //    }, 1 * 60 * 1000);
+    "use strict";
 
-console.log("startujeme chatHub...");
-var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-console.log("prihodime on receiveMessage...");
+    console.log("startujeme chatHub...");
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+    console.log("prihodime on receiveMessage...");
 
-connection.on("ReceiveMessage", function (user, message) {
-    console.log("received message");
-    location.reload();
-    //var li = document.createElement("li");
-    //document.getElementById("messagesList").appendChild(li);
-    //li.textContent = `${user} says ${message}`;
-});
+    connection.on("ReceiveMessage", function (user, message) {
+        console.log("received message");
+        location.reload();
+        //var li = document.createElement("li");
+        //document.getElementById("messagesList").appendChild(li);
+        //li.textContent = `${user} says ${message}`;
+    });
 
 </script>
