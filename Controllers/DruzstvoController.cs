@@ -24,7 +24,7 @@ namespace hasickyutok.Controllers
         public async Task<IActionResult> Index()
         {
             var hasicskyutokDbContext = _context.Druzstva.Include(d => d.Kategorie);
-            return View(await hasicskyutokDbContext.ToListAsync());
+            return View(await hasicskyutokDbContext.OrderBy(s=>s.StartovniCislo).ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
