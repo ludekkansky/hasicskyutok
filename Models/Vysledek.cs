@@ -27,7 +27,13 @@ public class Vysledek : IComparable
         if (!vysledek.NeplatnyPokus1 && !vysledek.NeplatnyPokus2 && vysledek.Cas1 == null && vysledek.Cas2.HasValue) return vysledek.Cas2;
 
         if (!vysledek.NeplatnyPokus1 && vysledek.NeplatnyPokus2 && vysledek.Cas1 != null) return vysledek.Cas1;
-        if (!vysledek.NeplatnyPokus1 && !vysledek.NeplatnyPokus2 && vysledek.Cas1 != null && vysledek.Cas2 != null) return vysledek.Cas1;
+        if (!vysledek.NeplatnyPokus1 && !vysledek.NeplatnyPokus2 && vysledek.Cas1 != null && vysledek.Cas2 != null)
+        {
+            if (vysledek.Cas1 < vysledek.Cas2)
+                return vysledek.Cas1;
+            else
+                return vysledek.Cas2;
+        }
         if (!vysledek.NeplatnyPokus1 && !vysledek.NeplatnyPokus2 && vysledek.Cas1 != null && vysledek.Cas2 == null) return vysledek.Cas1;
 
         throw new Exception($"Chybi podminka na {vysledek.Cas1}{vysledek.NeplatnyPokus1} {vysledek.Cas2}{vysledek.NeplatnyPokus2}");
@@ -38,18 +44,42 @@ public class Vysledek : IComparable
         var vysledek = obj as Vysledek;
         DateTime? vysledekA = VratNejlepsiCas(this);
         Console.WriteLine("Porovnáváme:--------------------------------");
-        Console.WriteLine($"Družstvo:{Druzstvo.Nazev} {Cas1}{NeplatnyPokus1}-{Cas2}{NeplatnyPokus2} vysledek={vysledekA}");
+        Console.WriteLine($"Družstvo:{Druzstvo.Nazev} T1:{Cas1:HH:mm:ss} Neplatný:{NeplatnyPokus1} - T2:{Cas2:HH:mm:ss} Neplatný:{NeplatnyPokus2} vysledek={vysledekA}");
         DateTime? vysledekB = VratNejlepsiCas(vysledek);
-        Console.WriteLine($"Druzstvo:{vysledek.Druzstvo.Nazev} {vysledek.Cas1}{vysledek.NeplatnyPokus1}-{vysledek.Cas2}{vysledek.NeplatnyPokus2} vysledek={vysledekB}");
+        Console.WriteLine($"Druzstvo:{vysledek.Druzstvo.Nazev} {vysledek.Cas1:HH:mm:ss} Neplatny:{vysledek.NeplatnyPokus1} - {vysledek.Cas2:HH:mm:ss} Neplatny:{vysledek.NeplatnyPokus2} vysledek={vysledekB}");
         Console.WriteLine("--------------------------------------------");
 
-        if (vysledekA == null && vysledekB != null) return 1;
-        if (vysledekA == null && vysledekB == null) return 0;
-        if (vysledekA != null && vysledekB == null) return -1;
+        if (vysledekA == null && vysledekB != null)
+        {
+            Console.WriteLine("Výsledek 1 není, druhý je vracíme 1");
+            return 1;
+        }
+        if (vysledekA == null && vysledekB == null)
+        {
+            Console.WriteLine("Výsledek 1 není, druhý taky ne vracíme 0");
+            return 0;
+        }
+        if (vysledekA != null && vysledekB == null)
+        {
+            Console.WriteLine("Výsledek 1 máme, druhý není vracíme -1");
+            return -1;
+        }
 
-        if (vysledekA.Value.TimeOfDay < vysledekB.Value.TimeOfDay) return -1;
-        if (vysledekA == vysledekB) return 0;
-        if (vysledekA.Value.TimeOfDay > vysledekB.Value.TimeOfDay) return 1;
+        if (vysledekA.Value.TimeOfDay < vysledekB.Value.TimeOfDay)
+        {
+            Console.WriteLine("A je lepší vracíme -1");
+            return -1;
+        }
+        if (vysledekA == vysledekB)
+        {
+            Console.WriteLine("Jsou stejné vraícme 0");
+            return 0;
+        }
+        if (vysledekA.Value.TimeOfDay > vysledekB.Value.TimeOfDay)
+        {
+            Console.WriteLine("B je lepší vracíme 1");
+            return 1;
+        }
 
         return 0;
     }

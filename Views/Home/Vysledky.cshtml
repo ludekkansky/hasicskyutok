@@ -3,6 +3,7 @@
     ViewData["Title"] = "Výsledky";
 }
 
+<font color="red" id='hlaska'>-</font>
 
 <br />
 <h3>Výsledky</h3>
@@ -31,7 +32,7 @@
                         <td align='center'>@vysledek.Druzstvo.StartovniCislo</td>
                         <td><a href='@Url.Action("Detail","Home",new {id=@vysledek.DruzstvoID})'>@vysledek.Druzstvo.Nazev</a></td>
                         <td>
-                            @Html.DisplayFor(s=>vysledek.Cas1)
+                            @Html.DisplayFor(s => vysledek.Cas1)
                             @if (vysledek.NeplatnyPokus1 == true)
                             {
                                 <font color='red'><strong>X</strong></font>
@@ -54,22 +55,21 @@
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 
-<script type="text/javascript">
-    //    setTimeout(function () { 
-    //      location.reload();
-    //    }, 1 * 60 * 1000);
+<script>
+
     "use strict";
-
-    console.log("startujeme chatHub...");
     var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-    console.log("prihodime on receiveMessage...");
-
-    connection.on("ReceiveMessage", function (user, message) {
-        console.log("received message");
+    connection.on("UpdateVysledek", function (druzstvoID, startovniCislo, druzstvoNazev, vysledek1, vysledek2) {
+        console.log("update vysledek id:" + druzstvoID + "; startovniCislo:" + startovniCislo + "; vysledek1:" + vysledek1 + "; vysledek2:" + vysledek2);
         location.reload();
-        //var li = document.createElement("li");
-        //document.getElementById("messagesList").appendChild(li);
-        //li.textContent = `${user} says ${message}`;
     });
+
+    connection.start().then(function () {
+        document.getElementById("hlaska").textContent = "";
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    document.getElementById("hlaska").textContent = "websocket offline";
 
 </script>

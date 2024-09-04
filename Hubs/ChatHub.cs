@@ -9,9 +9,9 @@ namespace SignalRChat.Hubs
             await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
 
-        public async Task UpdateVysledek(int druzstvoID, int startovniCislo,string druzstvoNazev, DateTime? vysledek1, DateTime? vysledek2)
+        public async Task UpdateVysledek(int druzstvoID, int startovniCislo, string druzstvoNazev, DateTime? vysledek1, DateTime? vysledek2)
         {
-            await Clients.All.SendAsync("UpdateVysledek",druzstvoID, startovniCislo, vysledek1, vysledek2);
+            await Clients.All.SendAsync("UpdateVysledek", druzstvoID, startovniCislo, vysledek1, vysledek2);
         }
     }
 }
