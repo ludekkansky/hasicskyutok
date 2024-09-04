@@ -5,11 +5,10 @@
 
 <font color="red" id='hlaska'>-</font>
 
-<br />
-<h3>Výsledky</h3>
+<h4>Výsledky</h4>
 @foreach (var kategorie in Model.GroupBy(s => s.Druzstvo.Kategorie.Nazev).Select(s => s.Key))
 {
-    <h3>@kategorie</h3>
+    <h4>@kategorie</h4>
     <table class="table table-hover table-striped">
         <thead>
             <tr>
