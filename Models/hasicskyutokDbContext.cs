@@ -19,8 +19,8 @@ namespace hasicskyutok.Models
                 .IsUnique();
 
             builder.Entity<Vysledek>()
-            .HasIndex(u => u.DruzstvoID)
-            .IsUnique();
+                .HasIndex(u => u.DruzstvoID)
+                .IsUnique();
         }
 
         public virtual DbSet<Kategorie> Kategorie { get; set; }
