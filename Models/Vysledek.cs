@@ -22,6 +22,7 @@ public class Vysledek : IComparable
         if (!vysledek.NeplatnyPokus1 && !vysledek.NeplatnyPokus2 && vysledek.Cas1 == null && vysledek.Cas2 == null) return null;
         if (vysledek.Cas1 == null && vysledek.Cas2 == null) return null;
         if (vysledek.NeplatnyPokus1 && vysledek.NeplatnyPokus2) return null;
+        if (vysledek.NeplatnyPokus1 && !vysledek.Cas2.HasValue) return null;
 
         if (vysledek.NeplatnyPokus1 && !vysledek.NeplatnyPokus2 && vysledek.Cas2 != null) return vysledek.Cas2;
         if (!vysledek.NeplatnyPokus1 && !vysledek.NeplatnyPokus2 && vysledek.Cas1 == null && vysledek.Cas2.HasValue) return vysledek.Cas2;
