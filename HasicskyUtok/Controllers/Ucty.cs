@@ -1,0 +1,94 @@
+using Microsoft.AspNetCore.Mvc;
+using HasicskyUtok.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
+namespace HasicskyUtok.Controllers
+{
+    [Authorize(Roles = "Admin")]
+    public class UctyController : Controller
+    {
+        private readonly HasicskyUtokDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public UctyController(HasicskyUtokDbContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
+
+        public IActionResult Index()
+        {
+            var uzivatele = _userManager.Users.ToList();
+            var roles = _roleManager.Roles.ToList();
+            if (!roles.Any(s => s.Name == "Admin")) return NotFound("Role admin neni definovana.");
+
+            var seznam = uzivatele.Select(s => new HasicskyUtok.ViewModel.PrehledUcet()
+            {
+                Id = s.Id,
+                Email = s.Email,
+                Potvrzen = s.EmailConfirmed,
+                Skupiny = string.Join(",", _userManager.GetRolesAsync(s).Result.ToArray())
+            });
+
+            foreach (var s in seznam)
+                Console.Write($"u:{s.ToString()}");
+
+            return View(seznam);
+        }
+
+        public async Task<IActionResult> PridejAdmina(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _userManager.AddToRoleAsync(user, "Admin");
+            return Json(true);
+        }
+
+        public async Task<IActionResult> OdeberAdmina(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _userManager.RemoveFromRoleAsync(user, "Admin");
+            return Json(true);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string Id)
+        {
+            // if (string.IsNullOrEmpty(Email))
+            // {
+            //     return NotFound("predany parametr je prazdny");
+            // }
+
+            var user = await _userManager.FindByIdAsync(Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        // POST: Kategorie/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string Email)
+        {
+            var user = await _userManager.FindByEmailAsync(Email);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+    }
+}

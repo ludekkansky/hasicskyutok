@@ -1,0 +1,53 @@
+@model IEnumerable<HasicskyUtok.Models.Druzstvo>
+
+@{
+    ViewData["Title"] = "Družstva";
+}
+
+<h1>Družstva</h1>
+
+<p>
+    <a asp-action="Create">Vytvořit nové</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nazev)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartovniCislo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kategorie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stafeta)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nazev)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartovniCislo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kategorie.Nazev)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stafeta.NazevStafety)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Upravit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Detail</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Smazat</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

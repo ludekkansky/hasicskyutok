@@ -1,0 +1,21 @@
+﻿@model IQueryable<HasicskyUtok.ViewModel.Vysledek>
+@{
+    ViewData["Title"] = "Úvodní stránka";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h3>Útok</h3>
+    @using (Html.BeginForm("Vyhledat", "VysledekUtok"))
+    {
+        <input type="text" name="startovniCislo" placeholder="Startovní číslo" class="form-control" />
+        <input type="submit" value="Vyhledat" class="btn btn-success" />
+    }
+
+    <h3>Štafeta</h3>
+    @using (Html.BeginForm("Vyhledat", "VysledekStafeta"))
+    {
+        <input type="text" name="startovniCislo" placeholder="Startovní číslo" class="form-control" />
+        <input type="submit" value="Vyhledat" class="btn btn-success" />
+    }
+}

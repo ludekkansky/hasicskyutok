@@ -1,0 +1,27 @@
+@model HasicskyUtok.Models.Stafeta
+
+@{
+    ViewData["Title"] = "Výmaz";
+}
+
+<h1>Výmaz</h1>
+
+<h3>Chcete opravdu smazat záznam?</h3>
+<div>
+    <h4>Stafeta</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NazevStafety)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NazevStafety)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ID" />
+        <input type="submit" value="Smazat" class="btn btn-danger" /> |
+        <a asp-action="Index">zpět na seznam</a>
+    </form>
+</div>
