@@ -17,6 +17,9 @@
                 <label asp-for="NazevStafety" class="control-label"></label>
                 <input asp-for="NazevStafety" class="form-control" />
                 <span asp-validation-for="NazevStafety" class="text-danger"></span>
+
+                <label asp-for="DoFinale" class="control-label"></label>
+                @Html.CheckBoxFor(s=>Model.DoFinale,new {htmlAttributes = new { @class="from-check-input"}})
             </div>
             <div class="form-group">
                 <input type="submit" value="Uložit" class="btn btn-primary" />

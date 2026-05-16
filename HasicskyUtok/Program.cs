@@ -60,11 +60,17 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseMigrationsEndPoint();
+    var db = scope.ServiceProvider.GetRequiredService<HasicskyUtok.Models.HasicskyUtokDbContext>();
+    db.Database.Migrate();
 }
-else
+
+//if (app.Environment.IsDevelopment())
+//{
+    app.UseMigrationsEndPoint();
+//}
+//else
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

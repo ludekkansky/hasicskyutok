@@ -3,6 +3,7 @@ using System;
 using HasicskyUtok.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HasicskyUtok.Migrations
 {
     [DbContext(typeof(HasicskyUtokDbContext))]
-    partial class HasicskyUtokDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260516080737_AddDoFinale")]
+    partial class AddDoFinale
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");

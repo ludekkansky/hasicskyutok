@@ -8,7 +8,6 @@ namespace HasicskyUtok.Models
         public HasicskyUtokDbContext(DbContextOptions<HasicskyUtokDbContext> options)
             : base(options)
         {
-            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

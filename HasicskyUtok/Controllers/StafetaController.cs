@@ -28,8 +28,7 @@ namespace HasicskyUtok.Controllers
                 return NotFound();
             }
 
-            var stafeta = await _context.Stafeta
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var stafeta = await _context.Stafeta.FirstOrDefaultAsync(m => m.ID == id);
             if (stafeta == null)
             {
                 return NotFound();
@@ -48,7 +47,7 @@ namespace HasicskyUtok.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,NazevStafety")] Stafeta stafeta)
+        public async Task<IActionResult> Create(Stafeta stafeta)
         {
             if (ModelState.IsValid)
             {
@@ -58,6 +57,7 @@ namespace HasicskyUtok.Controllers
             }
             return View(stafeta);
         }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Stafeta == null)
@@ -75,7 +75,7 @@ namespace HasicskyUtok.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,NazevSTafety")] Stafeta stafeta)
+        public async Task<IActionResult> Edit(int id, Stafeta stafeta)
         {
             if (id != stafeta.ID)
             {
@@ -112,8 +112,7 @@ namespace HasicskyUtok.Controllers
                 return NotFound();
             }
 
-            var stafeta = await _context.Stafeta
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var stafeta = await _context.Stafeta.FirstOrDefaultAsync(m => m.ID == id);
             if (stafeta == null)
             {
                 return NotFound();

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<HasicskyUtok.ViewModel.VysledekFinale>
+@{
+    ViewData["Title"] = "Výsledky komplet";
+}
+
+<font color="red" id='hlaska'>-</font>
+
+<h4>Výsledky (@Model.Count())</h4>
+@foreach (var kategorie in Model.GroupBy(s => s.Kategorie).Select(s => s.Key))
+{
+    <h4>@kategorie</h4>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Pořadí</th>
+                <th>Družstvo</th>
+                <th>Výsledný čas</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var seznam = Model.Where(s => s.Kategorie == kategorie).ToList().OrderBy(s => s.Cas);
+
+                int poradi = 1;
+                foreach (var vysledek in seznam)
+                {
+                    <tr>
+                        <td align='center'>@poradi</td>
+                        <td align='center'>@vysledek.Nazev</td>
+                        <td>
+                            @Html.DisplayFor(s => vysledek.Cas)
+                        </td>
+                    </tr>
+                    poradi++;
+                }
+            }
+        </tbody>
+    </table>
+}
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+<script>
+
+    "use strict";
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+    connection.on("UpdateVysledek", function (druzstvoID, startovniCislo, druzstvoNazev, vysledek1, vysledek2) {
+        console.log("update vysledek id:" + druzstvoID + "; startovniCislo:" + startovniCislo + "; vysledek1:" + vysledek1 + "; vysledek2:" + vysledek2);
+        location.reload();
+    });
+
+    connection.start().then(function () {
+        document.getElementById("hlaska").textContent = "";
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    document.getElementById("hlaska").textContent = "websocket offline";
+
+</script>
