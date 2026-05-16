@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             @{
-                var seznam = Model.Where(s => s.Kategorie == kategorie).ToList().OrderBy(s => s.Cas);
+                var seznam = Model.Where(s => s.Kategorie == kategorie).ToList().OrderBy(s => s.Utok).ThenBy(s => s.Cas);
 
                 int poradi = 1;
                 foreach (var vysledek in seznam)
@@ -29,6 +29,11 @@
                         <td align='center'>@vysledek.Nazev</td>
                         <td>
                             @Html.DisplayFor(s => vysledek.Cas)
+                            @if (vysledek.Utok == true)
+                            {
+                                <font color='red'><strong>X</strong></font>
+                            }
+
                         </td>
                     </tr>
                     poradi++;
@@ -45,14 +50,14 @@
     "use strict";
     var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
     connection.on("UpdateVysledek", function (druzstvoID, startovniCislo, druzstvoNazev, vysledek1, vysledek2) {
-        console.log("update vysledek id:" + druzstvoID + "; startovniCislo:" + startovniCislo + "; vysledek1:" + vysledek1 + "; vysledek2:" + vysledek2);
-        location.reload();
+    console.log("update vysledek id:" + druzstvoID + "; startovniCislo:" + startovniCislo + "; vysledek1:" + vysledek1 + "; vysledek2:" + vysledek2);
+    location.reload();
     });
 
     connection.start().then(function () {
-        document.getElementById("hlaska").textContent = "";
+    document.getElementById("hlaska").textContent = "";
     }).catch(function (err) {
-        return console.error(err.toString());
+    return console.error(err.toString());
     });
 
     document.getElementById("hlaska").textContent = "websocket offline";

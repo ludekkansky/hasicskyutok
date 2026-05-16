@@ -129,14 +129,13 @@ public class HomeController : Controller
             .ToList();
 
         var allDruzstvoIDs =
-            from druzstvo in finaloveStafeta
-            join vysledek in finaloveUtok on druzstvo.DruzstvoID equals vysledek.DruzstvoID
-            select druzstvo.DruzstvoID;
-        //  finaloveStafeta
-        //     .Select(x => x.DruzstvoID)
-        //     .Union(finaloveUtok.Select(x => x.DruzstvoID));
+         finaloveStafeta
+            .Select(x => x.DruzstvoID)
+            .Union(finaloveUtok.Select(x => x.DruzstvoID));
 
-        var finaloveVysledky = allDruzstvoIDs
+            //var spojene = allDruzstvoIDs.GroupBy(s=>s).Where(s=>s.Count()>1).Select(s=>s.Key).ToList();
+
+        var finaloveVysledky =allDruzstvoIDs
             .Select(id =>
             {
                 var stafeta = finaloveStafeta.FirstOrDefault(x => x.DruzstvoID == id);
@@ -165,7 +164,8 @@ public class HomeController : Controller
                 {
                     Nazev = nazev,
                     Kategorie = kategorie,
-                    Cas = cas
+                    Cas = cas,
+                    Utok = !minUtok.HasValue
                 };
             })
             .ToList();

@@ -14,4 +14,5 @@ public class VysledekFinale
     ]
     public TimeOnly? Cas { get; internal set; }
     public object Kategorie { get; internal set; }
+    public bool Utok { get; internal set; }
 }
