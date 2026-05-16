@@ -75,7 +75,7 @@ public class HomeController : Controller
             .OrderBy(s => s.CasStafeta1)
             .ThenBy(s => s.CasStafeta2)
             .Include(s => s.Druzstvo)
-                .ThenInclude(d => d.Kategorie)
+            .ThenInclude(d => d.Kategorie)
             .ToList();
 
         var finaloveStafeta = vysledkyStafetaList
@@ -83,8 +83,7 @@ public class HomeController : Controller
             .Select(g =>
             {
                 var druzstvo = g.First().Druzstvo;
-                var casy = g
-                    .Select(s => HasicskyUtok.Models.VysledekStafeta.VratNejlepsiCas(s))
+                var casy = g.Select(s => HasicskyUtok.Models.VysledekStafeta.VratNejlepsiCas(s))
                     .Where(t => t.HasValue)
                     .Select(t => t.Value.ToTimeSpan())
                     .ToList();
@@ -107,7 +106,7 @@ public class HomeController : Controller
             .OrderBy(s => s.Cas1)
             .ThenBy(s => s.Cas2)
             .Include(s => s.Druzstvo)
-                .ThenInclude(d => d.Kategorie)
+            .ThenInclude(d => d.Kategorie)
             .ToList();
 
         var finaloveUtok = vysledkyUtokList
@@ -115,8 +114,7 @@ public class HomeController : Controller
             .Select(g =>
             {
                 var druzstvo = g.First().Druzstvo;
-                var casy = g
-                    .Select(s => HasicskyUtok.Models.VysledekUtok.VratNejlepsiCas(s))
+                var casy = g.Select(s => HasicskyUtok.Models.VysledekUtok.VratNejlepsiCas(s))
                     .Where(t => t.HasValue)
                     .Select(t => t.Value.ToTimeSpan())
                     .ToList();
@@ -130,9 +128,13 @@ public class HomeController : Controller
             })
             .ToList();
 
-        var allDruzstvoIDs = finaloveStafeta
-            .Select(x => x.DruzstvoID)
-            .Union(finaloveUtok.Select(x => x.DruzstvoID));
+        var allDruzstvoIDs =
+            from druzstvo in finaloveStafeta
+            join vysledek in finaloveUtok on druzstvo.DruzstvoID equals vysledek.DruzstvoID
+            select druzstvo.DruzstvoID;
+        //  finaloveStafeta
+        //     .Select(x => x.DruzstvoID)
+        //     .Union(finaloveUtok.Select(x => x.DruzstvoID));
 
         var finaloveVysledky = allDruzstvoIDs
             .Select(id =>
